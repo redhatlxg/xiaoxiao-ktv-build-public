@@ -1,4 +1,4 @@
-name: Build private Android source (QA APK)
+name: Build private Android source (QA APK) # token setup verification
 
 on:
   workflow_dispatch:
