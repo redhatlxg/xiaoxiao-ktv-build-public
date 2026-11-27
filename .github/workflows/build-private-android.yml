@@ -81,4 +81,4 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-# Retry after repository secret was configured.
+# Retry after repository secret was configured and confirmed by owner.
