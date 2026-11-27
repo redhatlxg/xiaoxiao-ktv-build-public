@@ -80,3 +80,5 @@ jobs:
           path: source/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 7
+
+# Retry after repository secret was configured.
