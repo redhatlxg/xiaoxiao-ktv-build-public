@@ -50,6 +50,25 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Replace production offline-license key with ephemeral QA-only key
+        working-directory: source
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import pathlib, re, secrets
+          path = pathlib.Path("app/src/main/java/com/local/ktv/ShortLicenseCodec.kt")
+          content = path.read_text(encoding="utf-8")
+          content, count = re.subn(
+              r'(private const val HMAC_KEY_HEX = ")[0-9a-fA-F]{64}(")',
+              lambda m: m.group(1) + secrets.token_hex(32) + m.group(2),
+              content
+          )
+          if count != 1:
+              raise SystemExit(f"Expected exactly one production key to replace, found {count}")
+          path.write_text(content, encoding="utf-8")
+          print("Production license key replaced with a one-build QA key.")
+          PY
+
       - name: Build TV QA APK
         working-directory: source
         run: ./gradlew --no-daemon --stacktrace :app:assembleDebug
